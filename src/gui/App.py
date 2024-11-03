@@ -61,8 +61,6 @@ class App(ctk.CTk):
         self.titleIcon = PhotoImage(file="assets/Health_kepper__3_-removebg-preview.png")
         self.left_menu_widgets()
         self.right_widgets()
-        # self.update_cb()
-        #self.show_title()
 
 
 
@@ -134,11 +132,13 @@ class App(ctk.CTk):
         self.submitBtn.grid(row = 6,column = 0, pady = 15)
         self.dev =  ctk.CTkLabel(self.right_frame,text="App desarrollada por Lautaro Ildarraz" , font=("Helvetica",11,"bold","underline") )
         self.dev.grid(row =10 , column = 0)
+
+
     def set_sintoma(self):
         self.clear_frame()
         self.igualar_filas()
-
-
+        self.datos.sintomas.clear()
+        self.datos.cargar_sintomas()
         self.titleS = ctk.CTkLabel(self.right_frame,text="Registrar sintoma", font= ("Roboto", 15 , "bold"))
         self.titleS.grid(row = 0 , column = 0,pady = 20 )
         self.pacientesCB = ctk.CTkComboBox(self.right_frame,width=200, values = [paciente for paciente in self.datos.pacienteslista])
@@ -168,12 +168,14 @@ class App(ctk.CTk):
     def set_medicamento(self):
         self.clear_frame()
         self.igualar_filas()
+        self.datos.medicamentos.clear()
+        self.datos.cargar_meds()
         self.titleM = ctk.CTkLabel(self.right_frame,text="Registrar medicamento", font= ("Roboto", 15 , "bold"))
         self.titleM.grid(row = 0 , column = 0,pady = 20 )
         self.pacientesCB = ctk.CTkComboBox(self.right_frame,width=200,values=[paciente for paciente in self.datos.pacienteslista])
         self.pacientesCB.grid(row = 1 , column = 0,pady = 20 )
         self.pacientesCB.set("Paciente")
-        self.medicamentoCB =ctk.CTkComboBox(self.right_frame,width=200,values = [medicamento[1] for medicamento in self.datos.medicamentos])
+        self.medicamentoCB =ctk.CTkComboBox(self.right_frame,width=200,values = [medicamento[1] for medicamento in self.datos.getter_med()])
         self.medicamentoCB.grid(row = 2 , column = 0,pady = 20 )
         self.medicamentoCB.set("Medicamento")
         self.frame_time2 = ctk.CTkFrame(self.right_frame,width=100, fg_color="black")
@@ -271,12 +273,9 @@ class App(ctk.CTk):
         print(nombre)
         registros = ""
         for paciente in self.datos.registroMed:
-            print(paciente)
             if paciente.paciente == nombre:
-                print("Kiuisafas")
                 registros += f"\n{str(paciente)}"
         for paciente in self.datos.registroSint:
-            print(paciente)
             if paciente.paciente == nombre:
                 registros += f"\n{str(paciente)}"
 
@@ -299,20 +298,8 @@ class App(ctk.CTk):
         for widget in self.right_frame.winfo_children():
             widget.destroy()
 
-    def cargar_pacientes(self):
-        if self.datos.cargar_datos():
-            self.refresh_cb()
-
-    # def refresh_cb(self):
-    #     nombre_pacientes = [paciente.nombre for paciente in self.datos.pacientes]
-    #     return  nombre_pacientes
-
-    # def update_cb(self):
-    #     self.sintomasCB.configure(values=[s[1] for s in self.datos.sintomas])
-    #     self.medicamentoCB.configure(values=[m[1] for m in self.datos.sintomas])
-
     def openFormMed(self):
-        newForm = FormularioVentana()
+        newForm = FormularioVentana(self)
         newForm.mainloop()
 
     def openSintomForm(self):

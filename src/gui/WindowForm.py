@@ -7,8 +7,10 @@ from tkinter import messagebox
 
 
 class FormularioVentana(ctk.CTk):
-    def __init__(self):
+
+    def __init__(self,parent):
         super().__init__()
+        self.parent = parent
         self.data = DataManager()
         self.title("Agregar medicamento.")
         self.geometry("300x300")
@@ -26,15 +28,18 @@ class FormularioVentana(ctk.CTk):
     def guardar(self):
         nombre = self.nombre_medicamento.get()
         descripcion = self.descripcion_medicamento.get()
-        n_medicamento = {
-            "nombre_medicamento" : nombre,
-            "detalle" : descripcion
+        if nombre in self.data.medicamentos:
+            messagebox.showerror('Error','Medicamento ya registrado.')
+        else:
+            n_medicamento = {
+                "nombre_medicamento" : nombre,
+                "detalle" : descripcion
 
-        }
-        self.data.agregar_medicamento(n_medicamento)
-        print(save_med(n_medicamento))
-        messagebox.showinfo("Exito! ", "Medicamento agregado con exito.")
-        self.destroy()
+            }
+            self.data.agregar_medicamento(n_medicamento)
+            print(save_med(n_medicamento))
+            messagebox.showinfo("Exito! ", "Medicamento agregado con exito.")
+            self.destroy()
 
     def center_window(self):
         ancho = 300

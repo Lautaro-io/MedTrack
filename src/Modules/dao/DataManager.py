@@ -1,5 +1,6 @@
 from src.db.datosPacientes import *
 from src.Modules.entities.paciente import Paciente
+from tkinter import messagebox
 
 
 class DataManager:
@@ -26,6 +27,13 @@ class DataManager:
         self.medicamentos.append(medicamento)
         print("Medicamento Agregado!")
 
+    def getter_med(self):
+        return [m for m in self.medicamentos]
+
+    def getter_sis(self):
+        return [s for s in self.sintomas]
+
+
     def get_sintoma(self,paciente_nombre):
         return [sintoma for sintoma in self.sintomas if sintoma.paciente == paciente_nombre]
 
@@ -47,14 +55,18 @@ class DataManager:
                 _,nombre, dni, ingreso = paciente
                 n_paciente = Paciente(nombre, dni, ingreso)
                 self.pacienteslista.append(n_paciente.nombre)
+
+
+
     def cargar_meds(self):
         res = findAll("medicamentos")
         totalMeds = res["personas"]
         print(totalMeds)
         for m in totalMeds:
-            self.medicamentos.append(m)
-            print("Agregando" , m)
-
+            if m not in self.medicamentos:
+                self.medicamentos.append(m)
+            else:
+                messagebox.showerror("Error." , 'El medicamento ya esta en la lista de medicamentos')
         print(self.medicamentos)
 
     def cargar_sintomas(self):
@@ -65,7 +77,6 @@ class DataManager:
             self.sintomas.append(m)
             print("Agregando" , m)
 
-        print(self.medicamentos)
 
     def add_med_register(self,registro):
         self.registroMed.append(registro)
