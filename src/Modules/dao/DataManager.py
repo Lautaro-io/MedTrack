@@ -61,18 +61,15 @@ class DataManager:
     def cargar_meds(self):
         res = findAll("medicamentos")
         totalMeds = res["personas"]
-        print(totalMeds)
         for m in totalMeds:
             if m not in self.medicamentos:
                 self.medicamentos.append(m)
             else:
                 messagebox.showerror("Error." , 'El medicamento ya esta en la lista de medicamentos')
-        print(self.medicamentos)
 
     def cargar_sintomas(self):
         res = findAll("sintomas")
         totalS = res["personas"]
-        print(totalS)
         for m in totalS:
             self.sintomas.append(m)
             print("Agregando" , m)
